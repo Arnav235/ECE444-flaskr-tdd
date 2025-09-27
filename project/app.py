@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 from flask import Flask, g, render_template, request, session, flash, redirect, url_for, abort, jsonify
 
@@ -13,7 +14,6 @@ app = Flask(__name__)
 
 # load the config
 app.config.from_object(__name__)
-
 
 # connect to database
 def connect_db():
@@ -38,6 +38,10 @@ def get_db():
         g.sqlite_db = connect_db()
     return g.sqlite_db
 
+
+# Initialize database when app starts
+with app.app_context():
+    init_db()
 
 # close database connection
 @app.teardown_appcontext
@@ -106,5 +110,4 @@ def index():
 
 
 if __name__ == "__main__":
-    init_db()
     app.run()
